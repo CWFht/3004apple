@@ -74,6 +74,19 @@
             <div id="selectedCodeRow" class="code-row"></div>
             <dl id="variantSpecs" class="spec-list"></dl>
           </section>
+          <section id="officialSpecsSection" class="official-spec-section" hidden>
+            <div class="official-spec-header">
+              <div>
+                <span class="official-badge">Apple 공식 사양</span>
+                <h3>제품 상세 스펙</h3>
+                <p id="officialSpecSummary"></p>
+              </div>
+              <a id="officialSpecSource" target="_blank" rel="noopener">공식 사양 원문 ↗</a>
+            </div>
+            <div id="officialSpecHighlights" class="official-highlights"></div>
+            <div id="officialSpecGroups" class="official-groups"></div>
+            <p id="officialSpecBasis" class="official-basis"></p>
+          </section>
           <section class="sales-section"><h3>상담 포인트</h3><div id="salesPoints" class="sales-points"></div></section>
           <div class="detail-bottom-actions"><button id="addCompareBtn" class="primary-btn wide" type="button">비교함에 추가</button></div>
         </div>
@@ -99,6 +112,7 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="data.js"></script>
+  <script src="official-specs.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

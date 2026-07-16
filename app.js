@@ -1,6 +1,8 @@
 (() => {
   'use strict';
   const DATA = window.APP_DATA;
+  const SPEC_DATA = window.OFFICIAL_SPECS || {products:{}, updatedAt:''};
+  const OFFICIAL_SPECS = SPEC_DATA.products || {};
   if (!DATA || !Array.isArray(DATA.products)) {
     document.body.innerHTML = '<main style="padding:40px;font-family:sans-serif"><h1>데이터를 불러오지 못했습니다.</h1><p>data.js 파일이 index.html과 같은 폴더에 있는지 확인해주세요.</p></main>';
     return;
@@ -58,7 +60,9 @@
     salesPoints:$('salesPoints'), addCompareBtn:$('addCompareBtn'), compareTray:$('compareTray'), compareCount:$('compareCount'),
     compareTrayItems:$('compareTrayItems'), openCompareBtn:$('openCompareBtn'), modalBackdrop:$('modalBackdrop'), compareContent:$('compareContent'),
     closeModalBtn:$('closeModalBtn'), sideSheetBackdrop:$('sideSheetBackdrop'), sheetTitle:$('sheetTitle'), sheetContent:$('sheetContent'),
-    closeSheetBtn:$('closeSheetBtn'), toast:$('toast')
+    closeSheetBtn:$('closeSheetBtn'), toast:$('toast'),
+    officialSpecsSection:$('officialSpecsSection'), officialSpecSummary:$('officialSpecSummary'), officialSpecSource:$('officialSpecSource'),
+    officialSpecHighlights:$('officialSpecHighlights'), officialSpecGroups:$('officialSpecGroups'), officialSpecBasis:$('officialSpecBasis')
   };
 
   const state = {
@@ -71,7 +75,7 @@
   function esc(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
   function fmtPrice(n){return Number.isFinite(n)?`${n.toLocaleString('ko-KR')}원`:'가격 확인 필요'}
   function norm(s){return String(s??'').toLowerCase().replace(/\s+/g,'').replace(/[()_\-\/]/g,'')}
-  function productSearchText(p){return norm([p.family,p.category,p.description,...p.variants.flatMap(v=>Object.values(v))].join(' '))}
+  function productSearchText(p){const spec=OFFICIAL_SPECS[p.family];return norm([p.family,p.category,p.description,...p.variants.flatMap(v=>Object.values(v)),spec?JSON.stringify(spec):''].join(' '))}
   function getImage(p){return p.image || ''}
   function toast(msg){els.toast.textContent=msg;els.toast.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>els.toast.classList.remove('show'),1800)}
   async function copyText(text){try{await navigator.clipboard.writeText(text);toast('클립보드에 복사했습니다.')}catch{const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('클립보드에 복사했습니다.')}}
@@ -166,7 +170,7 @@
     const img=getImage(p);els.detailImage.style.display=img?'block':'none';els.detailFallback.hidden=!!img;
     if(img){els.detailImage.src=img;els.detailImage.alt=p.family;els.detailImage.onerror=()=>{els.detailImage.style.display='none';els.detailFallback.hidden=false;}}
     els.detailFavoriteBtn.textContent=state.favorites.has(p.id)?'♥':'♡';els.detailFavoriteBtn.classList.toggle('on',state.favorites.has(p.id));
-    renderCare(p);renderFilters(p);renderVariant(p,v);renderSalesPoints(p);
+    renderCare(p);renderFilters(p);renderVariant(p,v);renderOfficialSpecs(p,v);renderSalesPoints(p);
     els.addCompareBtn.textContent=state.compareIds.includes(p.id)?'비교함에서 제거':'비교함에 추가';
   }
 
@@ -211,11 +215,30 @@
     if(v.features)els.variantSpecs.innerHTML+=`<div style="grid-column:1/-1"><dt>특장점</dt><dd>${esc(v.features)}</dd></div>`;
   }
 
+  function renderOfficialSpecs(p,v){
+    const spec=OFFICIAL_SPECS[p.family];
+    if(!spec){els.officialSpecsSection.hidden=true;return}
+    els.officialSpecsSection.hidden=false;
+    els.officialSpecSummary.textContent=spec.summary||'';
+    els.officialSpecSource.href=spec.sourceUrl||p.sourceUrl||'#';
+    els.officialSpecSource.style.display=(spec.sourceUrl||p.sourceUrl)?'inline-flex':'none';
+    els.officialSpecHighlights.innerHTML=(spec.highlights||[]).map(h=>`<article class="official-highlight"><span>${esc(h.label)}</span><strong>${esc(h.value)}</strong><small>${esc(h.detail||'')}</small></article>`).join('');
+    els.officialSpecGroups.innerHTML=(spec.groups||[]).map((g,gi)=>`<details class="official-group" ${gi<2?'open':''}><summary><span>${esc(g.title)}</span><b>${(g.items||[]).length}개 항목</b></summary><dl>${(g.items||[]).map(i=>`<div><dt>${esc(i.label)}</dt><dd>${esc(i.value)}</dd></div>`).join('')}</dl></details>`).join('');
+    const selected=[v.chip&&`선택 칩 ${v.chip}`,v.cpu&&`CPU ${v.cpu}`,v.gpu&&`GPU ${v.gpu}`,v.ram&&`메모리 ${v.ram}`,v.display&&`화면 ${v.display}`].filter(Boolean).join(' · ');
+    els.officialSpecBasis.textContent=`${spec.basis||'Apple 공식 제품 사양'} · 확인 기준 ${SPEC_DATA.updatedAt||'2026-07-16'}${selected?` · 현재 선택: ${selected}`:''}`;
+  }
+
   function renderSalesPoints(p){
-    const facts=OFFICIAL_FACTS[p.family]||[];
-    const generic=[['추천 고객',p.description],['옵션 범위',`${p.variants.length}개 모델코드 운영`]];
-    const all=[...facts,...generic].slice(0,4);
-    els.salesPoints.innerHTML=all.map(([t,d])=>`<article class="point-card"><strong>${esc(t)}</strong><p>${esc(d)}</p></article>`).join('');
+    const spec=OFFICIAL_SPECS[p.family];
+    const c=spec?.compare||{};
+    const facts=[
+      c.standout&&['시리즈 핵심',c.standout],
+      c.camera&&['카메라·센서',c.camera],
+      c.battery&&['배터리',c.battery],
+      ['추천 고객',p.description],
+      ['옵션 범위',`${p.variants.length}개 모델코드 운영`]
+    ].filter(Boolean).slice(0,4);
+    els.salesPoints.innerHTML=facts.map(([t,d])=>`<article class="point-card"><strong>${esc(t)}</strong><p>${esc(d)}</p></article>`).join('');
   }
 
   function selectProduct(id,variant,options={}){
@@ -231,7 +254,7 @@
     products.forEach(p=>{
       let found=false;
       p.variants.forEach(v=>{
-        const text=norm([p.family,...Object.values(v)].join(' '));
+        const spec=OFFICIAL_SPECS[p.family];const text=norm([p.family,...Object.values(v),spec?JSON.stringify(spec):''].join(' '));
         if(text.includes(nq)&&out.length<30){out.push({p,v,score:norm(v.modelCode||'')===nq?0:norm(p.family).startsWith(nq)?1:2});found=true}
       });
       if(!found&&norm([p.family,p.description].join(' ')).includes(nq)&&out.length<30)out.push({p,v:p.variants[0],score:3});
@@ -266,10 +289,21 @@
   function openCompare(){
     if(state.compareIds.length<2){toast('비교할 제품 두 개를 선택하세요.');return}
     const [a,b]=state.compareIds.map(id=>byId.get(id));if(!a||!b)return;
-    const keys=[...new Set([...DISPLAY_ORDER.filter(k=>a.variants.some(v=>v[k])),...DISPLAY_ORDER.filter(k=>b.variants.some(v=>v[k]))])].filter(k=>!['features','coveredModel'].includes(k)).slice(0,12);
+    const sa=OFFICIAL_SPECS[a.family], sb=OFFICIAL_SPECS[b.family];
+    const officialRows=[
+      ['chip','칩·성능'],['display','디스플레이'],['camera','카메라·센서/오디오'],['battery','배터리'],
+      ['durability','내구성'],['connectivity','연결·충전'],['standout','시리즈 핵심']
+    ];
+    let rows='';
+    if(sa||sb){
+      rows=officialRows.map(([k,label])=>`<tr><th>${label}</th><td>${esc(sa?.compare?.[k]||'—')}</td><td>${esc(sb?.compare?.[k]||'—')}</td></tr>`).join('');
+    }else{
+      const keys=[...new Set([...DISPLAY_ORDER.filter(k=>a.variants.some(v=>v[k])),...DISPLAY_ORDER.filter(k=>b.variants.some(v=>v[k]))])].filter(k=>!['features','coveredModel'].includes(k)).slice(0,10);
+      rows=keys.map(k=>`<tr><th>${esc(FIELD_LABELS[k]||k)}</th><td>${esc(uniqueSummary(a,k))}</td><td>${esc(uniqueSummary(b,k))}</td></tr>`).join('');
+    }
     els.compareContent.innerHTML=`<div class="compare-head-grid"><div></div>${[a,b].map(p=>`<div class="compare-product-head">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.family)}">`:''}<h3>${esc(p.family)}</h3><strong>${p.minPrice?`${fmtPrice(p.minPrice)}부터`:'가격 확인'}</strong><p>${p.variants.length}개 옵션</p></div>`).join('')}</div>
-      <table class="compare-table"><tbody><tr><th>상담 핵심</th><td>${esc(a.description)}</td><td>${esc(b.description)}</td></tr><tr><th>시작 가격</th><td>${fmtPrice(a.minPrice)}</td><td>${fmtPrice(b.minPrice)}</td></tr>${keys.map(k=>`<tr><th>${esc(FIELD_LABELS[k]||k)}</th><td>${esc(uniqueSummary(a,k))}</td><td>${esc(uniqueSummary(b,k))}</td></tr>`).join('')}<tr><th>AppleCare+</th><td>${esc(careSummary(a,a.variants[0]||{}))}</td><td>${esc(careSummary(b,b.variants[0]||{}))}</td></tr></tbody></table>
-      <div class="compare-advice"><article class="advice-card"><strong>${esc(a.family)} 추천</strong><p>${esc(a.description)}</p></article><article class="advice-card"><strong>${esc(b.family)} 추천</strong><p>${esc(b.description)}</p></article></div>`;
+      <table class="compare-table"><tbody><tr><th>상담 핵심</th><td>${esc(sa?.summary||a.description)}</td><td>${esc(sb?.summary||b.description)}</td></tr><tr><th>시작 가격</th><td>${fmtPrice(a.minPrice)}</td><td>${fmtPrice(b.minPrice)}</td></tr>${rows}<tr><th>AppleCare+</th><td>${esc(careSummary(a,a.variants[0]||{}))}</td><td>${esc(careSummary(b,b.variants[0]||{}))}</td></tr></tbody></table>
+      <div class="compare-advice"><article class="advice-card"><strong>${esc(a.family)} 추천</strong><p>${esc(sa?.summary||a.description)}</p></article><article class="advice-card"><strong>${esc(b.family)} 추천</strong><p>${esc(sb?.summary||b.description)}</p></article></div>`;
     els.modalBackdrop.hidden=false;document.body.style.overflow='hidden';
   }
   function closeCompare(){els.modalBackdrop.hidden=true;document.body.style.overflow=''}

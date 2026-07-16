@@ -5,3 +5,30 @@
 @media(max-width:580px){:root{--safe:12px}.top-actions .soft-btn{font-size:12px;padding:9px}.icon-btn{width:38px;height:38px}.quick-row{display:none}.search-wrap{height:54px}.category-nav{padding-bottom:14px}.catalog-panel{border-radius:18px}.section-title-row h1{font-size:25px}.section-title-row select{font-size:12px;max-width:120px}.product-grid{grid-template-columns:1fr 1fr;gap:9px}.product-card{padding:10px;border-radius:16px}.product-image{height:115px;margin-bottom:10px}.product-card h3{font-size:14px;min-height:38px}.product-bottom{display:block}.product-bottom strong{font-size:14px;display:block}.product-bottom span{display:block;margin-top:4px}.detail-panel{padding:14px}.detail-hero{grid-template-columns:105px 1fr;gap:13px}.detail-image-wrap{height:120px}.detail-heading h2{font-size:23px}.detail-heading p{font-size:13px}.detail-links{font-size:13px}.filter-row{grid-template-columns:1fr}.filter-label{padding-top:0}.spec-list{grid-template-columns:1fr}.sales-points{grid-template-columns:1fr}.selected-head{align-items:flex-start}.selected-head .primary-btn{font-size:12px;padding:10px}.compare-tray{bottom:10px}.compare-tray>div>strong{display:none}.tray-item{max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.compare-head-grid{grid-template-columns:1fr 1fr}.compare-head-grid>div:first-child{display:none}.compare-table th{width:95px}.modal{padding:16px}.compare-advice{grid-template-columns:1fr}}
 [hidden]{display:none!important}
 .data-warning{display:block;margin-top:8px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif;font-weight:650;font-size:12px;color:#9a5a00;line-height:1.4}
+
+/* Apple 공식 상세 사양 */
+.official-spec-section{margin-top:18px;border:1px solid #dfe5ee;border-radius:20px;background:linear-gradient(180deg,#fff,#fafcff);padding:17px;box-shadow:0 8px 24px rgba(27,51,84,.045)}
+.official-spec-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.official-spec-header h3{font-size:19px;letter-spacing:-.025em;margin:7px 0 5px}
+.official-spec-header p{margin:0;color:var(--muted);font-size:13px;line-height:1.55;max-width:520px}
+.official-spec-header a{flex:0 0 auto;color:var(--blue);text-decoration:none;font-size:13px;font-weight:700;padding:9px 11px;background:#f1f7ff;border-radius:11px}
+.official-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#111;color:#fff;font-size:11px;font-weight:750;letter-spacing:-.01em}
+.official-badge:before{content:'✓';width:14px;height:14px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-size:9px}
+.official-highlights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:13px}
+.official-highlight{min-width:0;border:1px solid #e5e8ee;background:#fff;border-radius:14px;padding:12px}
+.official-highlight span{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}
+.official-highlight strong{display:block;font-size:16px;letter-spacing:-.02em;overflow-wrap:anywhere}
+.official-highlight small{display:block;color:#6e6e73;font-size:11px;line-height:1.4;margin-top:4px}
+.official-groups{display:grid;gap:8px}
+.official-group{border:1px solid #e4e7ec;background:#fff;border-radius:14px;overflow:hidden}
+.official-group summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 13px;cursor:pointer;font-size:14px;font-weight:750}
+.official-group summary::-webkit-details-marker{display:none}
+.official-group summary:after{content:'+';order:3;color:#7c7c82;font-size:18px;line-height:1}
+.official-group[open] summary:after{content:'−'}
+.official-group summary b{margin-left:auto;color:var(--muted);font-size:11px;font-weight:600}
+.official-group dl{margin:0;padding:0 13px 8px}
+.official-group dl div{display:grid;grid-template-columns:minmax(100px,35%) minmax(0,1fr);gap:12px;border-top:1px solid #eff0f3;padding:10px 0}
+.official-group dt{color:var(--muted);font-size:12px}
+.official-group dd{margin:0;font-size:13px;font-weight:650;line-height:1.45;overflow-wrap:anywhere}
+.official-basis{font-size:11px!important;line-height:1.5;color:#85858a!important;margin:12px 2px 0!important}
+@media(max-width:580px){.official-spec-section{padding:14px}.official-spec-header{display:block}.official-spec-header a{display:inline-flex!important;margin-top:11px}.official-highlights{grid-template-columns:1fr 1fr;gap:7px}.official-highlight{padding:10px}.official-highlight strong{font-size:14px}.official-group dl div{grid-template-columns:1fr;gap:4px}.official-group summary b{display:none}}
