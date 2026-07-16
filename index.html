@@ -3,66 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5f5f7" />
   <title>Apple 상담북</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="app-shell">
-    <aside class="sidebar glass-card">
+    <aside class="sidebar glass-card" id="sidebar">
       <div class="brand-row">
-        <div class="brand-mark">
-          <span class="apple-symbol"></span>
-          <strong>상담북</strong>
-        </div>
-        <span class="badge">내부 직원용</span>
+        <div class="brand-mark"><span class="apple-symbol">●</span><strong>Apple 상담북</strong></div>
+        <span class="badge" id="modeBadge">내부 직원용</span>
       </div>
 
-      <label class="search-box">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 18a7.5 7.5 0 1 1 5.303-12.803A7.5 7.5 0 0 1 10.5 18Zm0-13.2a5.7 5.7 0 1 0 0 11.4 5.7 5.7 0 0 0 0-11.4Zm8.7 14.4-3.1-3.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <input id="searchInput" type="text" placeholder="모델명, 모델코드, 색상, 용량으로 검색" />
-      </label>
+      <div class="search-wrap">
+        <label class="search-box" for="searchInput">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 18a7.5 7.5 0 1 1 5.303-12.803A7.5 7.5 0 0 1 10.5 18Zm0-13.2a5.7 5.7 0 1 0 0 11.4 5.7 5.7 0 0 0 0-11.4Zm8.7 14.4-3.1-3.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input id="searchInput" type="search" autocomplete="off" placeholder="모델명·모델코드·색상·mm 검색" />
+        </label>
+        <div id="searchResults" class="search-results" hidden></div>
+      </div>
 
       <section>
-        <h2>카테고리</h2>
+        <div class="section-head"><h2>카테고리</h2><small>Apple Watch 우선 구현</small></div>
         <div id="categoryGrid" class="category-grid"></div>
       </section>
 
-      <section>
-        <div class="section-head">
-          <h2>자주 사용하는 비교</h2>
-        </div>
+      <section id="favoriteSection">
+        <div class="section-head"><h2>자주 사용하는 비교</h2></div>
         <div id="favoriteList" class="favorites"></div>
       </section>
 
-      <nav class="bottom-nav">
-        <button class="nav-item active"><span>홈</span></button>
-        <button class="nav-item"><span>비교함</span></button>
-        <button class="nav-item"><span>즐겨찾기</span></button>
-        <button class="nav-item"><span>최근 조회</span></button>
-        <button class="nav-item"><span>설정</span></button>
+      <nav class="bottom-nav" aria-label="하단 메뉴">
+        <button class="nav-item active" type="button" data-nav="home"><span>홈</span></button>
+        <button class="nav-item" type="button" data-nav="compare"><span>비교함</span></button>
+        <button class="nav-item" type="button" data-nav="favorite"><span>즐겨찾기</span></button>
+        <button class="nav-item" type="button" data-nav="recent"><span>최근 조회</span></button>
+        <button class="nav-item" type="button" data-nav="settings"><span>보기 모드</span></button>
       </nav>
     </aside>
 
-    <main class="main-panel glass-card">
+    <main class="main-panel glass-card" id="mainPanel">
       <div class="panel-head">
-        <button class="icon-button" aria-label="뒤로가기">
-          <svg viewBox="0 0 24 24"><path d="M15 18 9 12l6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+        <button class="icon-button" id="backButton" type="button" aria-label="홈으로">‹</button>
         <h1 id="detailTitle">Apple Watch Series 11</h1>
         <div class="head-actions">
-          <button class="icon-button" aria-label="즐겨찾기">♡</button>
-          <button class="icon-button" aria-label="공유">↗</button>
+          <button class="icon-button" id="favoriteButton" type="button" aria-label="즐겨찾기">♡</button>
+          <button class="icon-button" id="shareButton" type="button" aria-label="공유">↗</button>
         </div>
       </div>
 
       <section class="hero-card">
-        <div class="watch-hero-visual" aria-hidden="true">
-          <div class="watch-face light"><span>10<br>09</span></div>
-          <div class="watch-side"></div>
-          <div class="watch-band-loop"></div>
+        <div class="product-visual-wrap">
+          <img id="heroImage" class="hero-product-image" src="assets/products/watch-series11.png" alt="Apple Watch Series 11 대표 이미지" />
+          <span class="source-label">운영자료 대표 이미지</span>
         </div>
         <div class="hero-copy">
           <p class="eyebrow">Apple Watch</p>
@@ -78,95 +71,41 @@
       <section class="feature-strip" id="featureStrip"></section>
 
       <section class="detail-tabs glass-card inner-card">
-        <div class="tab-row">
-          <button class="tab active">모델 선택</button>
-          <button class="tab">제품 특징</button>
-          <button class="tab">기술 사양</button>
-          <button class="tab">호환 액세서리</button>
+        <div class="tab-row" role="tablist" aria-label="제품 상세 메뉴">
+          <button class="tab active" type="button" data-main-tab="model">모델 선택</button>
+          <button class="tab" type="button" data-main-tab="features">제품 특징</button>
+          <button class="tab" type="button" data-main-tab="specs">기술 사양</button>
+          <button class="tab" type="button" data-main-tab="accessories">호환 액세서리</button>
         </div>
-
-        <div class="selector-group">
-          <label>시리즈</label>
-          <div id="seriesChips" class="chip-row"></div>
-        </div>
-        <div class="selector-group">
-          <label>크기</label>
-          <div id="sizeChips" class="chip-row"></div>
-        </div>
-        <div class="selector-group">
-          <label>재질</label>
-          <div id="materialChips" class="chip-row"></div>
-        </div>
-        <div class="selector-group">
-          <label>통신</label>
-          <div id="networkChips" class="chip-row"></div>
-        </div>
-        <div class="selector-group">
-          <label>밴드</label>
-          <div id="bandChips" class="chip-row"></div>
-        </div>
-        <div class="selector-group">
-          <label>색상</label>
-          <div id="colorSwatches" class="swatch-row"></div>
-        </div>
-
-        <div class="selection-footer">
-          <div>
-            <p id="selectionSummary" class="selection-summary"></p>
-            <strong id="selectionPrice" class="selection-price"></strong>
-            <div id="selectionCode" class="code-line"></div>
-          </div>
-          <button id="compareAddButton" class="primary-button">비교함에 추가</button>
-        </div>
+        <div id="mainTabContent"></div>
       </section>
     </main>
 
-    <section class="compare-panel glass-card">
+    <section class="compare-panel glass-card" id="comparePanel">
       <div class="panel-head compare-head">
         <h2>비교하기</h2>
-        <button class="ghost-button">비교함에 추가</button>
+        <button class="ghost-button" id="swapCompareButton" type="button">좌우 바꾸기</button>
       </div>
-
       <div class="compare-top">
         <div class="compare-product" id="compareLeftCard"></div>
         <div class="vs">VS</div>
         <div class="compare-product" id="compareRightCard"></div>
       </div>
-
-      <div class="compare-tabs">
-        <button class="compare-tab active">핵심 차이</button>
-        <button class="compare-tab">전체 스펙</button>
-        <button class="compare-tab">상담 요약</button>
+      <div class="compare-tabs" role="tablist" aria-label="비교 메뉴">
+        <button class="compare-tab active" type="button" data-compare-tab="differences">핵심 차이</button>
+        <button class="compare-tab" type="button" data-compare-tab="specs">전체 스펙</button>
+        <button class="compare-tab" type="button" data-compare-tab="consult">상담 요약</button>
       </div>
+      <div id="compareContent"></div>
+    </section>
+  </div>
 
-      <div class="diff-table-wrap">
-        <h3>핵심 차이만 보기</h3>
-        <table class="diff-table">
-          <thead>
-            <tr>
-              <th>항목</th>
-              <th id="compareLeftLabel"></th>
-              <th id="compareRightLabel"></th>
-            </tr>
-          </thead>
-          <tbody id="diffTableBody"></tbody>
-        </table>
-      </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-      <div class="consult-box">
-        <h3>상담 한눈에 보기</h3>
-        <div class="consult-cards">
-          <article class="consult-card left-tone">
-            <h4 id="consultLeftTitle"></h4>
-            <p id="consultLeftText"></p>
-          </article>
-          <article class="consult-card right-tone">
-            <h4 id="consultRightTitle"></h4>
-            <p id="consultRightText"></p>
-          </article>
-        </div>
-        <div class="price-gap" id="priceGapBox"></div>
-      </div>
+  <div id="modal" class="modal-backdrop" hidden>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head"><h2 id="modalTitle">최근 조회</h2><button id="modalClose" class="icon-button" type="button" aria-label="닫기">×</button></div>
+      <div id="modalBody"></div>
     </section>
   </div>
 
