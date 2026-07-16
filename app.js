@@ -1,156 +1,304 @@
-const DATA = {
-  categories: [
-    {id:'iphone',name:'iPhone',icon:'▯',available:false},
-    {id:'ipad',name:'iPad',icon:'▭',available:false},
-    {id:'watch',name:'Apple Watch',image:'assets/products/watch-series11.png',available:true},
-    {id:'airpods',name:'AirPods',icon:'◡',available:false},
-    {id:'mac',name:'Mac',icon:'⌨',available:false},
-    {id:'accessory',name:'액세서리',icon:'＋',available:false},
-    {id:'applecare',name:'AppleCare+',icon:'＋',available:false}
-  ],
-  favorites: [
-    {left:'SE 3',right:'Series 11'},
-    {left:'Series 11',right:'Ultra 3'}
-  ],
-  watchFamilies: {
-    'SE 3': {
-      family:'Apple Watch SE 3', shortName:'SE 3', image:'assets/products/watch-se3.png', appleCare:79000,
-      tagline:'가볍게 시작하는 스마트 워치.',
-      features:[
-        {icon:'◌',title:'Retina 디스플레이',body:'최대 1,000니트'},
-        {icon:'18h',title:'최대 18시간',body:'배터리 사용'},
-        {icon:'S10',title:'S10 칩',body:'일상에 충분한 성능'},
-        {icon:'50m',title:'50m 방수',body:'운동과 일상에 적합'}
-      ],
-      featureDetails:[
-        ['부담 없는 시작 가격','기본 알림, 운동 기록과 건강 관리를 합리적으로 시작하기 좋습니다.'],
-        ['40mm·44mm 선택','손목 크기와 화면 선호에 따라 두 가지 케이스 크기를 고를 수 있습니다.'],
-        ['필수 기능 중심','상시표시와 고급 소재보다는 기본 기능과 가격을 우선하는 고객에게 적합합니다.'],
-        ['가벼운 알루미늄','알루미늄 케이스와 스포츠 밴드 중심으로 간결하게 선택할 수 있습니다.']
-      ],
-      specs:{display:'Retina 디스플레이\n최대 1,000니트',battery:'최대 18시간',chip:'S10',health:'기본 건강·운동 기능',material:'알루미늄',water:'50m 방수'},
-      accessories:['40mm·44mm 호환 스포츠 밴드','Apple Watch 마그네틱 고속 충전 케이블','AppleCare+ for Watch SE 3'],
-      consult:'기본적인 알림, 운동, 건강 관리가 목적이고 가격을 중요하게 생각하는 고객',
-      variants:[
-        {size:'40mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 S/M',color:'스타라이트',colorHex:'#ded8ca',price:369000,code:'MEH34KH/A'},
-        {size:'40mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 M/L',color:'스타라이트',colorHex:'#ded8ca',price:369000,code:'MEH54KH/A'},
-        {size:'40mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 S/M',color:'미드나이트',colorHex:'#36383d',price:369000,code:'MEH94KH/A'},
-        {size:'40mm',material:'알루미늄',network:'GPS + Cellular',band:'스포츠 밴드 S/M',color:'스타라이트',colorHex:'#ded8ca',price:439000,code:'MEP64KH/A'},
-        {size:'44mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 S/M',color:'스타라이트',colorHex:'#ded8ca',price:409000,code:'MEHG4KH/A'},
-        {size:'44mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 M/L',color:'미드나이트',colorHex:'#36383d',price:409000,code:'MEHQ4KH/A'},
-        {size:'44mm',material:'알루미늄',network:'GPS + Cellular',band:'스포츠 밴드 S/M',color:'스타라이트',colorHex:'#ded8ca',price:479000,code:'MEPE4KH/A'}
-      ]
-    },
-    'Series 11': {
-      family:'Apple Watch Series 11', shortName:'Series 11', image:'assets/products/watch-series11.png', appleCare:119000,
-      tagline:'더 똑똑해진 건강 파트너.',
-      features:[
-        {icon:'AOD',title:'상시표시형 Retina',body:'최대 2,000니트'},
-        {icon:'24h',title:'최대 24시간',body:'배터리 사용'},
-        {icon:'S10',title:'S10 칩',body:'더 빠른 성능'},
-        {icon:'50m',title:'50m 방수',body:'운동과 일상에 적합'}
-      ],
-      featureDetails:[
-        ['상시표시 디스플레이','손목을 들지 않아도 시간과 주요 정보를 빠르게 확인할 수 있습니다.'],
-        ['42mm·46mm 선택','SE 3보다 큰 두 가지 케이스 크기로 화면 가독성을 높였습니다.'],
-        ['알루미늄·티타늄','가격 중심의 알루미늄과 고급 소재인 티타늄 중 선택할 수 있습니다.'],
-        ['건강 기능 강화','건강 기능과 더 긴 배터리를 중요하게 보는 고객에게 적합합니다.']
-      ],
-      specs:{display:'상시표시형 Retina 디스플레이\n최대 2,000니트',battery:'최대 24시간',chip:'S10',health:'심전도 앱 등 고급 건강 기능',material:'알루미늄 또는 티타늄',water:'50m 방수'},
-      accessories:['42mm·46mm 스포츠 밴드 및 스포츠 루프','티타늄 밀레니즈 루프','Apple Watch 마그네틱 고속 충전 케이블','AppleCare+ for Watch S11'],
-      consult:'상시표시, 더 밝은 디스플레이, 강화된 건강 기능과 고급 소재를 원하는 고객',
-      variants:[
-        {size:'42mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 S/M',color:'제트블랙',colorHex:'#222326',price:599000,code:'MEQT4KH/A'},
-        {size:'42mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 M/L',color:'스페이스그레이',colorHex:'#55575b',price:599000,code:'MEQX4KH/A'},
-        {size:'42mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 S/M',color:'로즈골드',colorHex:'#d9ada6',price:599000,code:'MEU04KH/A'},
-        {size:'42mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 S/M',color:'실버',colorHex:'#e1e3e6',price:599000,code:'MEU64KH/A'},
-        {size:'42mm',material:'알루미늄',network:'GPS + Cellular',band:'스포츠 밴드 S/M',color:'제트블랙',colorHex:'#222326',price:749000,code:'MF834KH/A'},
-        {size:'42mm',material:'티타늄',network:'GPS + Cellular',band:'스포츠 밴드 S/M',color:'내추럴 티타늄',colorHex:'#beb9ae',price:999000,code:'MF8M4KH/A'},
-        {size:'42mm',material:'티타늄',network:'GPS + Cellular',band:'밀레니즈 루프',color:'내추럴 티타늄',colorHex:'#beb9ae',price:1069000,code:'MF8P4KH/A'},
-        {size:'46mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 S/M',color:'제트블랙',colorHex:'#222326',price:639000,code:'MEUW4KH/A'},
-        {size:'46mm',material:'알루미늄',network:'GPS',band:'스포츠 밴드 S/M',color:'실버',colorHex:'#e1e3e6',price:639000,code:'MEV94KH/A'},
-        {size:'46mm',material:'알루미늄',network:'GPS + Cellular',band:'스포츠 밴드 S/M',color:'제트블랙',colorHex:'#222326',price:789000,code:'MFC24KH/A'},
-        {size:'46mm',material:'티타늄',network:'GPS + Cellular',band:'스포츠 밴드 S/M',color:'내추럴 티타늄',colorHex:'#beb9ae',price:1069000,code:'MFCW4KH/A'},
-        {size:'46mm',material:'티타늄',network:'GPS + Cellular',band:'밀레니즈 루프',color:'슬레이트 티타늄',colorHex:'#5a575a',price:1139000,code:'MFD34KH/A'}
-      ]
-    },
-    'Ultra 3': {
-      family:'Apple Watch Ultra 3', shortName:'Ultra 3', image:'assets/products/watch-ultra3.png', appleCare:149000,
-      tagline:'극한의 환경을 위한 최상위 워치.',
-      features:[
-        {icon:'49',title:'49mm 티타늄',body:'크고 견고한 케이스'},
-        {icon:'GPS',title:'Cellular 기본',body:'아웃도어 연결성'},
-        {icon:'UL',title:'울트라급 내구성',body:'전문 활동에 적합'},
-        {icon:'OUT',title:'운동 특화',body:'러닝·등산·다이빙'}
-      ],
-      featureDetails:[
-        ['49mm 단일 크기','가장 크고 선명한 화면과 강한 존재감을 원하는 고객에게 적합합니다.'],
-        ['티타늄 케이스','가벼움과 강도를 함께 고려한 프리미엄 소재를 사용합니다.'],
-        ['아웃도어 밴드','오션·알파인·트레일·밀레니즈 루프를 활동에 맞게 선택할 수 있습니다.'],
-        ['전문 활동 중심','일상용보다는 장시간 야외 활동과 전문 스포츠를 우선하는 고객에게 적합합니다.']
-      ],
-      specs:{display:'49mm 대형 고휘도 디스플레이',battery:'Ultra 라인업 장시간 배터리',chip:'고성능 Watch 칩',health:'고급 건강·운동·아웃도어 기능',material:'티타늄',water:'전문 수상 활동 대응'},
-      accessories:['49mm 오션 밴드','49mm 알파인 루프','49mm 트레일 루프','49mm 티타늄 밀레니즈 루프','AppleCare+ for Watch Ultra 3'],
-      consult:'야외 활동, 러닝, 등산과 수상 스포츠 등 전문적인 활용을 원하는 고객',
-      variants:[
-        {size:'49mm',material:'티타늄',network:'GPS + Cellular',band:'오션 밴드',color:'내추럴',colorHex:'#c0b9aa',price:1249000,code:'MEWH4KH/A'},
-        {size:'49mm',material:'티타늄',network:'GPS + Cellular',band:'알파인 루프 M',color:'내추럴',colorHex:'#c0b9aa',price:1249000,code:'MEWM4KH/A'},
-        {size:'49mm',material:'티타늄',network:'GPS + Cellular',band:'트레일 루프 S/M',color:'내추럴',colorHex:'#c0b9aa',price:1249000,code:'MEWR4KH/A'},
-        {size:'49mm',material:'티타늄',network:'GPS + Cellular',band:'오션 밴드',color:'블랙',colorHex:'#242529',price:1299000,code:'MF0J4KH/A'},
-        {size:'49mm',material:'티타늄',network:'GPS + Cellular',band:'티타늄 밀레니즈 루프 M',color:'블랙',colorHex:'#242529',price:1399000,code:'MF1Q4KH/A'},
-        {size:'49mm',material:'티타늄',network:'GPS + Cellular',band:'티타늄 밀레니즈 루프 M',color:'내추럴',colorHex:'#c0b9aa',price:1399000,code:'MEWY4KH/A'}
-      ]
-    }
+(() => {
+  'use strict';
+  const DATA = window.APP_DATA;
+  if (!DATA || !Array.isArray(DATA.products)) {
+    document.body.innerHTML = '<main style="padding:40px;font-family:sans-serif"><h1>데이터를 불러오지 못했습니다.</h1><p>data.js 파일이 index.html과 같은 폴더에 있는지 확인해주세요.</p></main>';
+    return;
   }
-};
 
-const FILTER_ORDER=['size','material','network','band','color'];
-const state={family:'Series 11',filters:{},mainTab:'model',compareTab:'differences',compare:['SE 3','Series 11'],customerMode:false,favorites:new Set(),recent:[]};
-const $=id=>document.getElementById(id);
-const els={categoryGrid:$('categoryGrid'),favoriteList:$('favoriteList'),searchInput:$('searchInput'),searchResults:$('searchResults'),detailTitle:$('detailTitle'),heroImage:$('heroImage'),heroName:$('heroName'),heroTagline:$('heroTagline'),heroPrice:$('heroPrice'),heroCare:$('heroCare'),featureStrip:$('featureStrip'),mainTabContent:$('mainTabContent'),compareLeftCard:$('compareLeftCard'),compareRightCard:$('compareRightCard'),compareContent:$('compareContent'),toast:$('toast'),modal:$('modal'),modalTitle:$('modalTitle'),modalBody:$('modalBody'),modeBadge:$('modeBadge'),favoriteButton:$('favoriteButton')};
-const money=n=>`${Number(n).toLocaleString('ko-KR')}원`;
-const family=()=>DATA.watchFamilies[state.family];
-const escapeHtml=s=>String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const products = DATA.products;
+  const byId = new Map(products.map(p => [p.id, p]));
+  const CATEGORIES = ['전체','iPhone','iPad','Apple Watch','AirPods','Mac','Accessory','AppleCare+'];
+  const CATEGORY_LABEL = {전체:'전체',iPhone:'iPhone',iPad:'iPad','Apple Watch':'Apple Watch',AirPods:'AirPods',Mac:'Mac',Accessory:'액세서리','AppleCare+':'AppleCare+'};
+  const FIELD_LABELS = {
+    display:'화면', chip:'칩', ram:'RAM', storage:'용량', color:'색상', connectivity:'통신 방식',
+    size:'크기', material:'재질', band:'밴드', caseColor:'케이스 색상', bandColor:'밴드 색상',
+    cpu:'CPU', gpu:'GPU', charging:'충전 방식', anc:'노이즈 캔슬링', port:'충전 포트',
+    compatible:'호환 모델', type:'유형', pencil:'호환 Apple Pencil', keyboard:'호환 키보드',
+    features:'특장점', coveredModel:'보장 대상'
+  };
+  const FILTER_ORDER = ['display','size','storage','connectivity','ram','cpu','gpu','material','band','caseColor','bandColor','color','type','compatible','charging','anc','port','pencil','keyboard'];
+  const DISPLAY_ORDER = ['display','chip','size','storage','connectivity','ram','cpu','gpu','material','band','caseColor','bandColor','color','charging','anc','port','type','compatible','pencil','keyboard','features','coveredModel'];
+  const OFFICIAL_FACTS = {
+    'Apple Watch SE3': [
+      ['케이스','40mm 또는 44mm 알루미늄'],['디스플레이','Retina 디스플레이 · 최대 1,000니트'],['추천','가격과 기본 건강·운동 기능을 중시']
+    ],
+    'Apple Watch Series 11': [
+      ['케이스','42mm 또는 46mm · 알루미늄/티타늄'],['디스플레이','상시표시형 Retina · 최대 2,000니트'],['추천','화면과 건강 기능의 균형을 중시']
+    ],
+    'Apple Watch Ultra3': [
+      ['케이스','49mm 티타늄'],['디스플레이','상시표시형 Retina · 최대 3,000니트'],['추천','아웃도어와 전문 운동 활용']
+    ],
+    'AirPods 4': [['착용','오픈형'],['ANC','미지원'],['배터리','한 번 충전 시 최대 5시간']],
+    'AirPods 4(ANC)': [['착용','오픈형'],['ANC','지원'],['방진·생활 방수','IP54']],
+    'AirPods Pro 3': [['착용','실리콘 이어팁형'],['배터리','ANC 상태 최대 8시간'],['방진·생활 방수','IP57']],
+    'AirPods Pro 2': [['착용','실리콘 이어팁형'],['배터리','ANC 상태 최대 6시간'],['방진·생활 방수','IP54']],
+    'AirPods Max': [['착용','오버이어'],['배터리','ANC 상태 최대 20시간'],['추천','몰입형 청취와 헤드폰 착용감']]
+  };
+  const RECOMMENDED = {
+    'iPhone': [['iPhone 17e','iPhone 17'],['iPhone 17','iPhone Air'],['iPhone 17 Pro','iPhone 17 Pro Max']],
+    'iPad': [['iPad A16','iPad Air 11'],['iPad Air 11','iPad Pro 11'],['iPad Air 13','iPad Pro 13']],
+    'Apple Watch': [['Apple Watch SE3','Apple Watch Series 11'],['Apple Watch Series 11','Apple Watch Ultra3']],
+    'AirPods': [['AirPods 4(ANC)','AirPods Pro 3'],['AirPods 4','AirPods 4(ANC)']],
+    'Mac': [['MacBook Neo','MacBook Air'],['MacBook Air','MacBook Pro'],['Mac mini','iMac']],
+    'Accessory': [], 'AppleCare+': []
+  };
 
-function showToast(message){els.toast.textContent=message;els.toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>els.toast.classList.remove('show'),1900)}
-function showModal(title,html){els.modalTitle.textContent=title;els.modalBody.innerHTML=html;els.modal.hidden=false}
-function closeModal(){els.modal.hidden=true}
-function addRecent(familyKey,variant){state.recent=state.recent.filter(x=>x.code!==variant.code);state.recent.unshift({familyKey,code:variant.code,label:`${DATA.watchFamilies[familyKey].family} ${variant.size} ${variant.color}`,price:variant.price});state.recent=state.recent.slice(0,8)}
+  const $ = id => document.getElementById(id);
+  const els = {
+    viewModeBtn:$('viewModeBtn'), favoritesBtn:$('favoritesBtn'), recentBtn:$('recentBtn'),
+    searchInput:$('searchInput'), clearSearchBtn:$('clearSearchBtn'), searchResults:$('searchResults'),
+    categoryNav:$('categoryNav'), catalogTitle:$('catalogTitle'), catalogMeta:$('catalogMeta'), sortSelect:$('sortSelect'),
+    recommended:$('recommendedComparisons'), productGrid:$('productGrid'), emptyState:$('emptyState'),
+    detailPanel:$('detailPanel'), detailEmpty:$('detailEmpty'), detailContent:$('detailContent'), closeDetailBtn:$('closeDetailBtn'),
+    detailFavoriteBtn:$('detailFavoriteBtn'), shareBtn:$('shareBtn'), detailImage:$('detailImage'), detailFallback:$('detailFallback'),
+    detailCategory:$('detailCategory'), detailFamily:$('detailFamily'), detailDescription:$('detailDescription'), detailStartPrice:$('detailStartPrice'),
+    officialLink:$('officialLink'), variantCountBadge:$('variantCountBadge'), appleCareBox:$('appleCareBox'), filterControls:$('filterControls'),
+    selectedPrice:$('selectedPrice'), copyCodeBtn:$('copyCodeBtn'), selectedCodeRow:$('selectedCodeRow'), variantSpecs:$('variantSpecs'),
+    salesPoints:$('salesPoints'), addCompareBtn:$('addCompareBtn'), compareTray:$('compareTray'), compareCount:$('compareCount'),
+    compareTrayItems:$('compareTrayItems'), openCompareBtn:$('openCompareBtn'), modalBackdrop:$('modalBackdrop'), compareContent:$('compareContent'),
+    closeModalBtn:$('closeModalBtn'), sideSheetBackdrop:$('sideSheetBackdrop'), sheetTitle:$('sheetTitle'), sheetContent:$('sheetContent'),
+    closeSheetBtn:$('closeSheetBtn'), toast:$('toast')
+  };
 
-function initFilters(familyKey,preferred={}){state.family=familyKey;state.filters={};FILTER_ORDER.forEach(key=>{const options=getOptions(key);state.filters[key]=options.includes(preferred[key])?preferred[key]:options[0]});const v=getSelectedVariant();if(v)addRecent(familyKey,v)}
-function getOptions(key){const index=FILTER_ORDER.indexOf(key);return [...new Set(family().variants.filter(v=>FILTER_ORDER.slice(0,index).every(k=>!state.filters[k]||v[k]===state.filters[k])).map(v=>v[key]))]}
-function setFilter(key,value){els.searchInput.value='';els.searchResults.hidden=true;const index=FILTER_ORDER.indexOf(key);state.filters[key]=value;FILTER_ORDER.slice(index+1).forEach(next=>{const opts=getOptions(next);state.filters[next]=opts[0]});const v=getSelectedVariant();if(v)addRecent(state.family,v);renderAll()}
-function getSelectedVariant(){return family().variants.find(v=>FILTER_ORDER.every(k=>v[k]===state.filters[k]))||family().variants[0]}
-function minPrice(f){return Math.min(...f.variants.map(v=>v.price))}
+  const state = {
+    category:'전체', sort:'name', search:'', selectedId:null, filterKeys:[], selections:{}, selectedVariant:null,
+    compareIds:[], favorites:new Set(readStore('appleConsultFavorites',[])), recent:readStore('appleConsultRecent',[]), customerMode:false
+  };
 
-function renderCategories(){els.categoryGrid.innerHTML=DATA.categories.map(c=>`<button type="button" class="category-card ${c.id==='watch'?'active':''} ${c.available?'':'pending'}" data-category="${c.id}"><div class="category-art">${c.image?`<img src="${c.image}" alt="">`:`<span class="category-icon">${c.icon}</span>`}</div><span>${c.name}</span></button>`).join('');els.categoryGrid.querySelectorAll('[data-category]').forEach(btn=>btn.addEventListener('click',()=>{const c=DATA.categories.find(x=>x.id===btn.dataset.category);if(!c.available){showToast(`${c.name}은 다음 단계에서 PPT 데이터와 연결됩니다.`);return}document.getElementById('mainPanel').scrollIntoView({behavior:'smooth'});showToast('Apple Watch 카테고리를 표시했습니다.')}))}
-function renderFavorites(){els.favoriteList.innerHTML=DATA.favorites.map((f,i)=>`<button class="favorite-item" type="button" data-favorite-index="${i}"><span><strong>${f.left} vs ${f.right}</strong><small>비교표와 상담 요약 바로 보기</small></span><span class="favorite-pair"><img src="${DATA.watchFamilies[f.left].image}" alt=""><img src="${DATA.watchFamilies[f.right].image}" alt="">›</span></button>`).join('');els.favoriteList.querySelectorAll('[data-favorite-index]').forEach(btn=>btn.addEventListener('click',()=>{const f=DATA.favorites[Number(btn.dataset.favoriteIndex)];state.compare=[f.left,f.right];state.compareTab='differences';renderCompare();document.getElementById('comparePanel').scrollIntoView({behavior:'smooth'});showToast(`${f.left}와 ${f.right} 비교를 열었습니다.`)}))}
+  function readStore(key,fallback){try{return JSON.parse(localStorage.getItem(key)) ?? fallback}catch{return fallback}}
+  function writeStore(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch{}}
+  function esc(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+  function fmtPrice(n){return Number.isFinite(n)?`${n.toLocaleString('ko-KR')}원`:'가격 확인 필요'}
+  function norm(s){return String(s??'').toLowerCase().replace(/\s+/g,'').replace(/[()_\-\/]/g,'')}
+  function productSearchText(p){return norm([p.family,p.category,p.description,...p.variants.flatMap(v=>Object.values(v))].join(' '))}
+  function getImage(p){return p.image || ''}
+  function toast(msg){els.toast.textContent=msg;els.toast.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>els.toast.classList.remove('show'),1800)}
+  async function copyText(text){try{await navigator.clipboard.writeText(text);toast('클립보드에 복사했습니다.')}catch{const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('클립보드에 복사했습니다.')}}
 
-function renderHero(){const f=family();els.detailTitle.textContent=f.family;els.heroImage.src=f.image;els.heroImage.alt=`${f.family} 대표 이미지`;els.heroName.textContent=f.shortName;els.heroTagline.textContent=f.tagline;els.heroPrice.textContent=`${money(minPrice(f))}부터`;els.heroCare.textContent=`AppleCare+ ${money(f.appleCare)}`;els.featureStrip.innerHTML=f.features.map(x=>`<article class="feature-card"><div class="feature-icon">${escapeHtml(x.icon)}</div><strong>${escapeHtml(x.title)}</strong><p class="muted">${escapeHtml(x.body)}</p></article>`).join('');els.favoriteButton.textContent=state.favorites.has(state.family)?'♥':'♡'}
-function chipGroup(label,key){const opts=getOptions(key);return `<div class="selector-group"><label>${label}</label><div class="chip-row">${opts.map(v=>`<button type="button" class="chip ${state.filters[key]===v?'active':''}" data-filter="${key}" data-value="${escapeHtml(v)}">${escapeHtml(v)}</button>`).join('')}</div></div>`}
-function renderModelTab(){const v=getSelectedVariant();return `<div><div class="selector-group"><label>시리즈</label><div class="chip-row">${Object.keys(DATA.watchFamilies).map(k=>`<button type="button" class="chip ${state.family===k?'active':''}" data-family="${k}">${k}</button>`).join('')}</div></div>${chipGroup('크기','size')}${chipGroup('재질','material')}${chipGroup('통신','network')}${chipGroup('밴드','band')}<div class="selector-group"><label>색상</label><div class="swatch-row">${getOptions('color').map(c=>{const item=family().variants.find(x=>x.color===c);return `<span class="swatch-wrap"><button type="button" class="swatch ${state.filters.color===c?'active':''}" data-filter="color" data-value="${escapeHtml(c)}" style="background:${item.colorHex}" aria-label="${escapeHtml(c)}"></button><span class="swatch-name">${escapeHtml(c)}</span></span>`}).join('')}</div></div><div class="selection-footer"><div><p class="selection-summary">${family().family} · ${v.size} · ${v.material} · ${v.network} · ${v.band}</p><strong class="selection-price">${money(v.price)}</strong><div class="code-line">색상 ${escapeHtml(v.color)} · 모델코드 <strong>${escapeHtml(v.code)}</strong><button type="button" class="copy-button" id="copyCodeButton">복사</button></div></div><button type="button" class="primary-button" id="compareAddButton">비교함에 추가</button></div></div>`}
-function renderFeaturesTab(){return `<div class="content-section"><div class="content-grid">${family().featureDetails.map(([t,b])=>`<article class="info-card"><h3>${escapeHtml(t)}</h3><p>${escapeHtml(b)}</p></article>`).join('')}</div></div>`}
-function renderSpecsTab(){const v=getSelectedVariant();const rows=[['디스플레이',family().specs.display],['배터리',family().specs.battery],['칩',family().specs.chip],['건강 기능',family().specs.health],['소재',family().specs.material],['방수',family().specs.water],['현재 선택',`${v.size} · ${v.material} · ${v.network}`],['판매가',money(v.price)]];return `<ul class="spec-list">${rows.map(([a,b])=>`<li><strong>${a}</strong><span>${escapeHtml(b)}</span></li>`).join('')}</ul>`}
-function renderAccessoriesTab(){return `<div class="accessory-list">${family().accessories.map((a,i)=>`<div class="accessory-item"><strong>${escapeHtml(a)}</strong><span>${i===family().accessories.length-1?'보증 서비스':'호환 액세서리'}</span></div>`).join('')}</div>`}
-function renderMainTab(){document.querySelectorAll('[data-main-tab]').forEach(b=>b.classList.toggle('active',b.dataset.mainTab===state.mainTab));els.mainTabContent.innerHTML=state.mainTab==='model'?renderModelTab():state.mainTab==='features'?renderFeaturesTab():state.mainTab==='specs'?renderSpecsTab():renderAccessoriesTab();bindMainContent()}
-function bindMainContent(){els.mainTabContent.querySelectorAll('[data-family]').forEach(b=>b.addEventListener('click',()=>{els.searchInput.value='';initFilters(b.dataset.family);renderAll()}));els.mainTabContent.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>setFilter(b.dataset.filter,b.dataset.value)));const copy=$('copyCodeButton');if(copy)copy.addEventListener('click',()=>copyText(getSelectedVariant().code,'모델코드를 복사했습니다.'));const add=$('compareAddButton');if(add)add.addEventListener('click',()=>{if(state.compare.includes(state.family)){showToast('이미 비교함에 있는 제품입니다.');return}state.compare[1]=state.family;renderCompare();showToast(`${family().shortName}을 비교함에 추가했습니다.`)})}
+  function renderCategories(){
+    els.categoryNav.innerHTML=CATEGORIES.map(cat=>{
+      const count=cat==='전체'?products.length:products.filter(p=>p.category===cat).length;
+      return `<button class="category-btn ${state.category===cat?'active':''}" data-cat="${esc(cat)}">${esc(CATEGORY_LABEL[cat])}<span>${count}</span></button>`;
+    }).join('');
+    els.categoryNav.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{
+      state.category=b.dataset.cat; state.search=''; els.searchInput.value=''; hideSearch(); els.detailPanel.classList.remove('mobile-open'); renderAll();
+    });
+  }
 
-function compareCard(key){const f=DATA.watchFamilies[key],v=f.variants.reduce((a,b)=>a.price<=b.price?a:b);return `<div class="compare-card-inner"><img src="${f.image}" alt="${f.family}"><div class="compare-meta"><small>Apple Watch</small><h4>${f.shortName}</h4><p>${v.size} · ${v.material} · ${v.network}</p><strong>${money(v.price)}부터</strong></div></div>`}
-function keyDiffHtml(left,right){const rows=[['디스플레이',left.specs.display,right.specs.display],['배터리',left.specs.battery,right.specs.battery],['건강 기능',left.specs.health,right.specs.health],['재질',left.specs.material,right.specs.material],['크기', [...new Set(left.variants.map(v=>v.size))].join(' / '), [...new Set(right.variants.map(v=>v.size))].join(' / ')],['시작 가격',money(minPrice(left)),money(minPrice(right))]];return `<table class="diff-table"><thead><tr><th>항목</th><th>${left.shortName}</th><th>${right.shortName}</th></tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${r[0]}</strong></td><td>${escapeHtml(r[1])}</td><td>${escapeHtml(r[2])}</td></tr>`).join('')}</tbody></table>`}
-function fullSpecsHtml(left,right){const summarize=f=>({크기:[...new Set(f.variants.map(v=>v.size))].join(' / '),통신:[...new Set(f.variants.map(v=>v.network))].join(' / '),소재:[...new Set(f.variants.map(v=>v.material))].join(' / '),밴드:[...new Set(f.variants.map(v=>v.band))].join(' / '),가격:`${money(minPrice(f))} ~ ${money(Math.max(...f.variants.map(v=>v.price)))}`,AppleCare:money(f.appleCare)});const a=summarize(left),b=summarize(right);return `<table class="diff-table"><thead><tr><th>구분</th><th>${left.shortName}</th><th>${right.shortName}</th></tr></thead><tbody>${Object.keys(a).map(k=>`<tr><td><strong>${k}</strong></td><td>${escapeHtml(a[k])}</td><td>${escapeHtml(b[k])}</td></tr>`).join('')}</tbody></table>`}
-function consultHtml(left,right){const gap=Math.abs(minPrice(right)-minPrice(left));return `<div class="consult-cards"><article class="consult-card left-tone"><h3>${left.shortName}이 적합한 고객</h3><p>${escapeHtml(left.consult)}</p></article><article class="consult-card right-tone"><h3>${right.shortName}이 적합한 고객</h3><p>${escapeHtml(right.consult)}</p></article></div><div class="price-gap">시작 가격 차이 · 약 ${money(gap)}</div>`}
-function renderCompare(){const [lk,rk]=state.compare,left=DATA.watchFamilies[lk],right=DATA.watchFamilies[rk];els.compareLeftCard.innerHTML=compareCard(lk);els.compareRightCard.innerHTML=compareCard(rk);document.querySelectorAll('[data-compare-tab]').forEach(b=>b.classList.toggle('active',b.dataset.compareTab===state.compareTab));els.compareContent.innerHTML=state.compareTab==='differences'?keyDiffHtml(left,right):state.compareTab==='specs'?fullSpecsHtml(left,right):consultHtml(left,right)}
+  function filteredProducts(){
+    let list=products.filter(p=>state.category==='전체'||p.category===state.category);
+    const q=norm(state.search);
+    if(q) list=list.filter(p=>productSearchText(p).includes(q));
+    return list.sort((a,b)=>{
+      if(state.sort==='price-asc') return (a.minPrice??Infinity)-(b.minPrice??Infinity);
+      if(state.sort==='price-desc') return (b.minPrice??-1)-(a.minPrice??-1);
+      if(state.sort==='variants') return b.variants.length-a.variants.length;
+      return a.family.localeCompare(b.family,'ko');
+    });
+  }
 
-function allSearchItems(){return Object.entries(DATA.watchFamilies).flatMap(([familyKey,f])=>f.variants.map(v=>({familyKey,family:f.family,shortName:f.shortName,...v}))) }
-function renderSearch(query){const q=query.trim().toLowerCase();if(!q){els.searchResults.hidden=true;return}const terms=q.split(/\s+/).filter(Boolean);const matches=allSearchItems().filter(x=>terms.every(t=>[x.family,x.shortName,x.size,x.material,x.network,x.band,x.color,x.code,String(x.price)].some(v=>String(v).toLowerCase().includes(t)))).slice(0,12);els.searchResults.innerHTML=matches.length?matches.map((x,i)=>`<button type="button" class="search-result ${i===0?'active':''}" data-result-code="${x.code}"><strong>${x.family} ${x.size} ${x.color}</strong><small>${x.material} · ${x.network} · ${x.code}</small><span class="result-price">${money(x.price)}</span></button>`).join(''):`<div class="search-empty">일치하는 모델이 없습니다.</div>`;els.searchResults.hidden=false;els.searchResults.querySelectorAll('[data-result-code]').forEach(b=>b.addEventListener('click',()=>selectSearchResult(b.dataset.resultCode)))}
-function selectSearchResult(code){const item=allSearchItems().find(x=>x.code===code);if(!item)return;initFilters(item.familyKey,item);els.searchInput.value=`${item.family} ${item.size} ${item.color}`;els.searchResults.hidden=true;state.mainTab='model';renderAll();showToast(`${item.code} 모델을 표시했습니다.`)}
-function copyText(text,message){if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(()=>showToast(message)).catch(()=>fallbackCopy(text,message))}else fallbackCopy(text,message)}
-function fallbackCopy(text,message){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');showToast(message)}catch{showToast(`복사할 내용: ${text}`)}ta.remove()}
+  function renderRecommended(){
+    const cat=state.category==='전체'?'Apple Watch':state.category;
+    const combos=RECOMMENDED[cat]||[];
+    els.recommended.innerHTML=combos.length?combos.map(([a,b])=>`<button data-a="${esc(a)}" data-b="${esc(b)}">${esc(a)} vs ${esc(b)}</button>`).join(''):'';
+    els.recommended.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{
+      const a=products.find(p=>p.family===btn.dataset.a), b=products.find(p=>p.family===btn.dataset.b);
+      if(a&&b){state.compareIds=[a.id,b.id];renderCompareTray();openCompare();}
+    });
+  }
 
-function renderRecentModal(){const html=state.recent.length?`<div class="recent-list">${state.recent.map(x=>`<div class="recent-item"><span><strong>${escapeHtml(x.label)}</strong><br><small>${escapeHtml(x.code)} · ${money(x.price)}</small></span><button type="button" data-recent-code="${x.code}">열기</button></div>`).join('')}</div>`:'<p class="muted">최근 조회한 제품이 없습니다.</p>';showModal('최근 조회',html);els.modalBody.querySelectorAll('[data-recent-code]').forEach(b=>b.addEventListener('click',()=>{selectSearchResult(b.dataset.recentCode);closeModal()}))}
-function toggleCustomerMode(){state.customerMode=!state.customerMode;document.body.classList.toggle('customer-mode',state.customerMode);els.modeBadge.textContent=state.customerMode?'고객 보기':'내부 직원용';showToast(state.customerMode?'모델코드를 숨긴 고객 보기로 전환했습니다.':'내부 직원용 보기로 전환했습니다.')}
-function renderAll(){renderHero();renderMainTab();renderCompare()}
+  function productCard(p){
+    const img=getImage(p);
+    return `<article class="product-card ${state.selectedId===p.id?'selected':''}" data-id="${esc(p.id)}">
+      <button class="favorite-dot ${state.favorites.has(p.id)?'on':''}" data-fav="${esc(p.id)}" aria-label="즐겨찾기">${state.favorites.has(p.id)?'♥':'♡'}</button>
+      <div class="product-image">${img?`<img src="${esc(img)}" alt="${esc(p.family)}" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><div class="fallback-art" hidden></div>`:'<div class="fallback-art"></div>'}</div>
+      <span class="category-label">${esc(CATEGORY_LABEL[p.category]||p.category)}</span><h3>${esc(p.family)}</h3>
+      <div class="product-bottom"><strong>${p.minPrice?`${fmtPrice(p.minPrice)}부터`:'가격 확인'}</strong><span>${p.variants.length}개 옵션</span></div>
+    </article>`;
+  }
 
-function bindStaticEvents(){document.querySelectorAll('[data-main-tab]').forEach(b=>b.addEventListener('click',()=>{state.mainTab=b.dataset.mainTab;renderMainTab()}));document.querySelectorAll('[data-compare-tab]').forEach(b=>b.addEventListener('click',()=>{state.compareTab=b.dataset.compareTab;renderCompare()}));els.searchInput.addEventListener('input',e=>renderSearch(e.target.value));els.searchInput.addEventListener('keydown',e=>{if(e.key==='Enter'){const first=els.searchResults.querySelector('[data-result-code]');if(first){e.preventDefault();selectSearchResult(first.dataset.resultCode)}}if(e.key==='Escape')els.searchResults.hidden=true});document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))els.searchResults.hidden=true});$('favoriteButton').addEventListener('click',()=>{state.favorites.has(state.family)?state.favorites.delete(state.family):state.favorites.add(state.family);renderHero();showToast(state.favorites.has(state.family)?'즐겨찾기에 추가했습니다.':'즐겨찾기에서 제거했습니다.')});$('shareButton').addEventListener('click',()=>{const v=getSelectedVariant();copyText(`${family().family} ${v.size} ${v.color} / ${money(v.price)} / ${v.code}`,'제품 정보를 복사했습니다.')});$('backButton').addEventListener('click',()=>{initFilters('Series 11');state.mainTab='model';renderAll();window.scrollTo({top:0,behavior:'smooth'})});$('swapCompareButton').addEventListener('click',()=>{state.compare.reverse();renderCompare();showToast('비교 제품의 좌우를 바꿨습니다.')});document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const n=b.dataset.nav;if(n==='home'){$('mainPanel').scrollIntoView({behavior:'smooth'})}else if(n==='compare'){$('comparePanel').scrollIntoView({behavior:'smooth'})}else if(n==='favorite'){$('favoriteSection').scrollIntoView({behavior:'smooth'})}else if(n==='recent')renderRecentModal();else toggleCustomerMode()}));$('modalClose').addEventListener('click',closeModal);els.modal.addEventListener('click',e=>{if(e.target===els.modal)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()})}
+  function renderCatalog(){
+    const list=filteredProducts();
+    const title=state.search?`“${state.search}” 검색 결과`:CATEGORY_LABEL[state.category];
+    els.catalogTitle.textContent=title;
+    els.catalogMeta.textContent=`제품군 ${list.length}개 · 모델 옵션 ${list.reduce((n,p)=>n+p.variants.length,0).toLocaleString()}개`;
+    els.productGrid.innerHTML=list.map(productCard).join('');
+    els.emptyState.hidden=list.length!==0;
+    els.productGrid.querySelectorAll('.product-card').forEach(card=>card.onclick=e=>{
+      if(e.target.closest('[data-fav]'))return;
+      selectProduct(card.dataset.id);
+    });
+    els.productGrid.querySelectorAll('[data-fav]').forEach(btn=>btn.onclick=e=>{e.stopPropagation();toggleFavorite(btn.dataset.fav);});
+  }
 
-initFilters('Series 11');renderCategories();renderFavorites();bindStaticEvents();renderAll();
+  function productFilterKeys(p){
+    const keys=new Set();p.variants.forEach(v=>Object.keys(v).forEach(k=>{if(!['price','modelCode','features','coveredModel'].includes(k))keys.add(k)}));
+    return FILTER_ORDER.filter(k=>keys.has(k)&&new Set(p.variants.map(v=>v[k]).filter(Boolean)).size>1);
+  }
+  function initSelections(p,preferredVariant){
+    state.filterKeys=productFilterKeys(p);state.selections={};
+    const v=preferredVariant||p.variants[0]||{};
+    state.filterKeys.forEach(k=>{if(v[k]!=null)state.selections[k]=String(v[k])});
+    state.selectedVariant=v;
+  }
+  function candidatesBefore(p,index){
+    return p.variants.filter(v=>state.filterKeys.slice(0,index).every(k=>!state.selections[k]||String(v[k])===state.selections[k]));
+  }
+  function matchingVariants(p){return p.variants.filter(v=>state.filterKeys.every(k=>!state.selections[k]||String(v[k])===state.selections[k]));}
+  function ensureValidSelection(p){
+    state.filterKeys.forEach((key,index)=>{
+      const vals=[...new Set(candidatesBefore(p,index).map(v=>v[key]).filter(v=>v!==undefined&&v!==''))].map(String);
+      if(!vals.includes(state.selections[key]))state.selections[key]=vals[0]||'';
+    });
+    state.selectedVariant=matchingVariants(p)[0]||p.variants[0]||{};
+  }
+
+  function renderDetail(){
+    const p=byId.get(state.selectedId);
+    if(!p){els.detailEmpty.hidden=false;els.detailContent.hidden=true;return}
+    ensureValidSelection(p);
+    const v=state.selectedVariant||{};
+    els.detailEmpty.hidden=true;els.detailContent.hidden=false;
+    els.detailCategory.textContent=CATEGORY_LABEL[p.category]||p.category;els.detailFamily.textContent=p.family;els.detailDescription.textContent=p.description;
+    els.detailStartPrice.textContent=p.minPrice?`${fmtPrice(p.minPrice)}부터`:'가격 정보 확인 필요';els.variantCountBadge.textContent=`${p.variants.length}개 모델 옵션`;
+    els.officialLink.href=p.sourceUrl||'#';els.officialLink.style.display=p.sourceUrl?'inline':'none';
+    const img=getImage(p);els.detailImage.style.display=img?'block':'none';els.detailFallback.hidden=!!img;
+    if(img){els.detailImage.src=img;els.detailImage.alt=p.family;els.detailImage.onerror=()=>{els.detailImage.style.display='none';els.detailFallback.hidden=false;}}
+    els.detailFavoriteBtn.textContent=state.favorites.has(p.id)?'♥':'♡';els.detailFavoriteBtn.classList.toggle('on',state.favorites.has(p.id));
+    renderCare(p);renderFilters(p);renderVariant(p,v);renderSalesPoints(p);
+    els.addCompareBtn.textContent=state.compareIds.includes(p.id)?'비교함에서 제거':'비교함에 추가';
+  }
+
+  function careOptionsFor(p,v={}){
+    let options=[...(p.appleCareOptions||[])];
+    const display=String(v.display||'');
+    if((p.family==='MacBook Air'||p.family==='MacBook Pro')&&display){
+      const size=(display.match(/13|14|15|16/)||[])[0];
+      if(size){const sized=options.filter(o=>String(o.variant.coveredModel||'').includes(size));if(sized.length)options=sized;}
+    }
+    return options;
+  }
+  function careSummary(p,v={}){
+    const o=careOptionsFor(p,v)[0];
+    return o?`${o.family.replace('AppleCare+ ','')} · ${fmtPrice(o.variant.price)}`:'—';
+  }
+  function renderCare(p){
+    const options=careOptionsFor(p,state.selectedVariant||{});
+    if(options.length){
+      const o=options[0],c=o.variant;els.appleCareBox.hidden=false;
+      els.appleCareBox.innerHTML=`<strong>AppleCare+ 함께 확인</strong><div><span>${esc(o.family.replace('AppleCare+ ',''))}</span><b>${fmtPrice(c.price)}</b></div><div class="internal-only"><span>모델코드</span><b>${esc(c.modelCode||'')}</b></div>${options.length>1?`<small style="display:block;margin-top:7px;color:#58708a">동일 제품군 AppleCare+ ${options.length}종 운영 · 선택 모델의 세대를 확인하세요.</small>`:''}`;
+    }else els.appleCareBox.hidden=true;
+  }
+
+  function renderFilters(p){
+    if(!state.filterKeys.length){els.filterControls.innerHTML='<p style="color:var(--muted);font-size:14px">선택 가능한 추가 옵션이 없습니다.</p>';return}
+    els.filterControls.innerHTML=state.filterKeys.map((key,index)=>{
+      const vals=[...new Set(candidatesBefore(p,index).map(v=>v[key]).filter(v=>v!==undefined&&v!==''))].map(String);
+      return `<div class="filter-row"><div class="filter-label">${esc(FIELD_LABELS[key]||key)}</div><div class="filter-values">${vals.map(val=>`<button class="filter-chip ${state.selections[key]===val?'active':''}" data-key="${esc(key)}" data-index="${index}" data-value="${esc(val)}">${esc(val)}</button>`).join('')}</div></div>`;
+    }).join('');
+    els.filterControls.querySelectorAll('.filter-chip').forEach(btn=>btn.onclick=()=>{
+      const index=Number(btn.dataset.index);state.selections[btn.dataset.key]=btn.dataset.value;
+      state.filterKeys.slice(index+1).forEach(k=>delete state.selections[k]);ensureValidSelection(p);renderDetail();
+    });
+  }
+
+  function renderVariant(p,v){
+    els.selectedPrice.textContent=fmtPrice(v.price);els.selectedCodeRow.innerHTML=`<span class="internal-only">${esc(v.modelCode||'모델코드 없음')}</span><span class="customer-only" style="display:none">선택 옵션이 적용되었습니다.</span>${v.warning?`<small class="data-warning internal-only">⚠ ${esc(v.warning)}</small>`:''}`;
+    els.copyCodeBtn.disabled=!v.modelCode;els.copyCodeBtn.classList.add('internal-only');
+    const keys=DISPLAY_ORDER.filter(k=>v[k]!==undefined&&v[k]!==''&&k!=='features');
+    els.variantSpecs.innerHTML=keys.map(k=>`<div><dt>${esc(FIELD_LABELS[k]||k)}</dt><dd>${esc(v[k])}</dd></div>`).join('');
+    if(v.features)els.variantSpecs.innerHTML+=`<div style="grid-column:1/-1"><dt>특장점</dt><dd>${esc(v.features)}</dd></div>`;
+  }
+
+  function renderSalesPoints(p){
+    const facts=OFFICIAL_FACTS[p.family]||[];
+    const generic=[['추천 고객',p.description],['옵션 범위',`${p.variants.length}개 모델코드 운영`]];
+    const all=[...facts,...generic].slice(0,4);
+    els.salesPoints.innerHTML=all.map(([t,d])=>`<article class="point-card"><strong>${esc(t)}</strong><p>${esc(d)}</p></article>`).join('');
+  }
+
+  function selectProduct(id,variant,options={}){
+    const p=byId.get(id);if(!p)return;
+    state.selectedId=id;initSelections(p,variant);addRecent(id);renderCatalog();renderDetail();
+    if(window.innerWidth<=900&&options.openMobile!==false)els.detailPanel.classList.add('mobile-open');
+  }
+  function addRecent(id){state.recent=[id,...state.recent.filter(x=>x!==id)].slice(0,20);writeStore('appleConsultRecent',state.recent)}
+  function toggleFavorite(id){state.favorites.has(id)?state.favorites.delete(id):state.favorites.add(id);writeStore('appleConsultFavorites',[...state.favorites]);renderCatalog();if(state.selectedId===id)renderDetail()}
+
+  function searchEntries(q){
+    const nq=norm(q);if(!nq)return[];const out=[];
+    products.forEach(p=>{
+      let found=false;
+      p.variants.forEach(v=>{
+        const text=norm([p.family,...Object.values(v)].join(' '));
+        if(text.includes(nq)&&out.length<30){out.push({p,v,score:norm(v.modelCode||'')===nq?0:norm(p.family).startsWith(nq)?1:2});found=true}
+      });
+      if(!found&&norm([p.family,p.description].join(' ')).includes(nq)&&out.length<30)out.push({p,v:p.variants[0],score:3});
+    });
+    const seen=new Set();return out.sort((a,b)=>a.score-b.score).filter(x=>{const k=`${x.p.id}:${x.v?.modelCode||''}`;if(seen.has(k))return false;seen.add(k);return true}).slice(0,20);
+  }
+  function renderSearch(){
+    const q=els.searchInput.value.trim();state.search=q;renderCatalog();
+    if(!q){hideSearch();return}
+    const results=searchEntries(q);els.searchResults.hidden=false;
+    els.searchResults.innerHTML=results.length?results.map((x,i)=>`<button class="search-result ${i===0?'active':''}" data-id="${esc(x.p.id)}" data-code="${esc(x.v?.modelCode||'')}">${x.p.image?`<img src="${esc(x.p.image)}" alt="">`:'<div class="mini-fallback"></div>'}<div><strong>${esc(x.p.family)}</strong><span>${esc([x.v?.storage,x.v?.size,x.v?.color,x.v?.compatible].filter(Boolean).join(' · ')||x.p.category)}</span></div>${x.v?.modelCode?`<code class="internal-only">${esc(x.v.modelCode)}</code>`:''}</button>`).join(''):'<div style="padding:22px;text-align:center;color:var(--muted)">검색 결과가 없습니다.</div>';
+    els.searchResults.querySelectorAll('.search-result').forEach(btn=>btn.onclick=()=>{
+      const p=byId.get(btn.dataset.id);const v=p?.variants.find(v=>v.modelCode===btn.dataset.code)||p?.variants[0];
+      if(p){state.category=p.category;renderCategories();selectProduct(p.id,v);hideSearch();}
+    });
+  }
+  function hideSearch(){els.searchResults.hidden=true}
+
+  function renderCompareTray(){
+    const ids=state.compareIds.filter(id=>byId.has(id));state.compareIds=ids;els.compareTray.hidden=!ids.length;els.compareCount.textContent=ids.length;
+    els.compareTrayItems.className='compare-tray-items';els.compareTrayItems.innerHTML=ids.map(id=>`<span class="tray-item">${esc(byId.get(id).family)}<button data-remove="${esc(id)}">×</button></span>`).join('');
+    els.compareTrayItems.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{state.compareIds=state.compareIds.filter(id=>id!==b.dataset.remove);renderCompareTray();renderDetail()});
+    els.openCompareBtn.disabled=ids.length<2;
+  }
+  function toggleCompare(id){
+    if(state.compareIds.includes(id))state.compareIds=state.compareIds.filter(x=>x!==id);
+    else if(state.compareIds.length<2)state.compareIds.push(id);
+    else{toast('비교는 두 제품까지 가능합니다.');return}
+    renderCompareTray();renderDetail();
+  }
+  function uniqueSummary(p,key){const vals=[...new Set(p.variants.map(v=>v[key]).filter(Boolean).map(String))];return vals.length?vals.slice(0,8).join(' / '):'—'}
+  function openCompare(){
+    if(state.compareIds.length<2){toast('비교할 제품 두 개를 선택하세요.');return}
+    const [a,b]=state.compareIds.map(id=>byId.get(id));if(!a||!b)return;
+    const keys=[...new Set([...DISPLAY_ORDER.filter(k=>a.variants.some(v=>v[k])),...DISPLAY_ORDER.filter(k=>b.variants.some(v=>v[k]))])].filter(k=>!['features','coveredModel'].includes(k)).slice(0,12);
+    els.compareContent.innerHTML=`<div class="compare-head-grid"><div></div>${[a,b].map(p=>`<div class="compare-product-head">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.family)}">`:''}<h3>${esc(p.family)}</h3><strong>${p.minPrice?`${fmtPrice(p.minPrice)}부터`:'가격 확인'}</strong><p>${p.variants.length}개 옵션</p></div>`).join('')}</div>
+      <table class="compare-table"><tbody><tr><th>상담 핵심</th><td>${esc(a.description)}</td><td>${esc(b.description)}</td></tr><tr><th>시작 가격</th><td>${fmtPrice(a.minPrice)}</td><td>${fmtPrice(b.minPrice)}</td></tr>${keys.map(k=>`<tr><th>${esc(FIELD_LABELS[k]||k)}</th><td>${esc(uniqueSummary(a,k))}</td><td>${esc(uniqueSummary(b,k))}</td></tr>`).join('')}<tr><th>AppleCare+</th><td>${esc(careSummary(a,a.variants[0]||{}))}</td><td>${esc(careSummary(b,b.variants[0]||{}))}</td></tr></tbody></table>
+      <div class="compare-advice"><article class="advice-card"><strong>${esc(a.family)} 추천</strong><p>${esc(a.description)}</p></article><article class="advice-card"><strong>${esc(b.family)} 추천</strong><p>${esc(b.description)}</p></article></div>`;
+    els.modalBackdrop.hidden=false;document.body.style.overflow='hidden';
+  }
+  function closeCompare(){els.modalBackdrop.hidden=true;document.body.style.overflow=''}
+
+  function showSheet(type){
+    const ids=type==='favorites'?[...state.favorites]:state.recent;els.sheetTitle.textContent=type==='favorites'?'즐겨찾기':'최근 조회';
+    const list=ids.map(id=>byId.get(id)).filter(Boolean);els.sheetContent.innerHTML=list.length?list.map(p=>`<button class="sheet-item" data-id="${esc(p.id)}"><div><strong>${esc(p.family)}</strong><small>${esc(CATEGORY_LABEL[p.category])} · ${p.minPrice?fmtPrice(p.minPrice)+'부터':'가격 확인'}</small></div><span>›</span></button>`).join(''):'<p style="color:var(--muted);padding:30px 0;text-align:center">저장된 제품이 없습니다.</p>';
+    els.sheetContent.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{const p=byId.get(b.dataset.id);state.category=p.category;renderCategories();selectProduct(p.id);closeSheet()});
+    els.sideSheetBackdrop.hidden=false;
+  }
+  function closeSheet(){els.sideSheetBackdrop.hidden=true}
+
+  function setCustomerMode(on){state.customerMode=on;document.body.classList.toggle('customer-mode',on);els.viewModeBtn.textContent=on?'고객 보기':'내부 직원용';document.querySelectorAll('.customer-only').forEach(el=>el.style.display=on?'inline':'none');renderSearch()}
+  function renderAll(){renderCategories();renderRecommended();renderCatalog();renderDetail();renderCompareTray()}
+
+  els.sortSelect.onchange=()=>{state.sort=els.sortSelect.value;renderCatalog()};
+  els.searchInput.oninput=renderSearch;els.searchInput.onkeydown=e=>{if(e.key==='Enter'){const first=els.searchResults.querySelector('.search-result');if(first)first.click()}if(e.key==='Escape')hideSearch()};
+  els.clearSearchBtn.onclick=()=>{els.searchInput.value='';state.search='';hideSearch();renderCatalog();els.searchInput.focus()};
+  document.querySelectorAll('[data-query]').forEach(b=>b.onclick=()=>{els.searchInput.value=b.dataset.query;renderSearch();els.searchInput.focus()});
+  document.addEventListener('click',e=>{if(!e.target.closest('.search-area'))hideSearch()});
+  els.closeDetailBtn.onclick=()=>els.detailPanel.classList.remove('mobile-open');
+  els.detailFavoriteBtn.onclick=()=>state.selectedId&&toggleFavorite(state.selectedId);
+  els.copyCodeBtn.onclick=()=>state.selectedVariant?.modelCode&&copyText(state.selectedVariant.modelCode);
+  els.shareBtn.onclick=()=>{const p=byId.get(state.selectedId),v=state.selectedVariant;if(p&&v)copyText(`${p.family}\n${Object.entries(v).filter(([k])=>!['features'].includes(k)).map(([k,val])=>`${FIELD_LABELS[k]||k}: ${val}`).join('\n')}`)};
+  els.addCompareBtn.onclick=()=>state.selectedId&&toggleCompare(state.selectedId);els.openCompareBtn.onclick=openCompare;els.closeModalBtn.onclick=closeCompare;els.modalBackdrop.onclick=e=>{if(e.target===els.modalBackdrop)closeCompare()};
+  els.favoritesBtn.onclick=()=>showSheet('favorites');els.recentBtn.onclick=()=>showSheet('recent');els.closeSheetBtn.onclick=closeSheet;els.sideSheetBackdrop.onclick=e=>{if(e.target===els.sideSheetBackdrop)closeSheet()};
+  els.viewModeBtn.onclick=()=>setCustomerMode(!state.customerMode);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideSearch();closeCompare();closeSheet();els.detailPanel.classList.remove('mobile-open')}});
+
+  renderAll();
+  const initial=products.find(p=>p.family==='iPhone 17')||products[0];if(initial)selectProduct(initial.id,null,{openMobile:false});
+})();
