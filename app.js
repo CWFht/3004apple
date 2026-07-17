@@ -10,7 +10,7 @@
 
   const products = DATA.products;
   const byId = new Map(products.map(p => [p.id, p]));
-  const CATEGORIES = ['전체','iPhone','iPad','Apple Watch','AirPods','Mac','Accessory','AppleCare+'];
+  const CATEGORIES = ['iPhone','iPad','Apple Watch','AirPods','Mac','Accessory','AppleCare+'];
   const CATEGORY_LABEL = {전체:'전체',iPhone:'iPhone',iPad:'iPad','Apple Watch':'Apple Watch',AirPods:'AirPods',Mac:'Mac',Accessory:'액세서리','AppleCare+':'AppleCare+'};
   const FIELD_LABELS = {
     display:'화면', chip:'칩', ram:'RAM', storage:'용량', color:'색상', connectivity:'통신 방식',
@@ -50,7 +50,7 @@
   const els = {
     viewModeBtn:$('viewModeBtn'), favoritesBtn:$('favoritesBtn'), recentBtn:$('recentBtn'),
     searchInput:$('searchInput'), clearSearchBtn:$('clearSearchBtn'), searchResults:$('searchResults'),
-    categoryNav:$('categoryNav'), catalogTitle:$('catalogTitle'), catalogMeta:$('catalogMeta'), sortSelect:$('sortSelect'),
+    categoryNav:$('categoryNav'), catalogTitle:$('catalogTitle'), catalogMeta:$('catalogMeta'), showAllBtn:$('showAllBtn'), sortSelect:$('sortSelect'),
     recommended:$('recommendedComparisons'), productGrid:$('productGrid'), emptyState:$('emptyState'),
     detailPanel:$('detailPanel'), detailEmpty:$('detailEmpty'), detailContent:$('detailContent'), closeDetailBtn:$('closeDetailBtn'),
     detailFavoriteBtn:$('detailFavoriteBtn'), shareBtn:$('shareBtn'), detailImage:$('detailImage'), detailFallback:$('detailFallback'),
@@ -66,7 +66,7 @@
   };
 
   const state = {
-    category:'전체', sort:'name', search:'', selectedId:null, filterKeys:[], selections:{}, selectedVariant:null,
+    category:'iPhone', sort:'name', search:'', selectedId:null, filterKeys:[], selections:{}, selectedVariant:null,
     compareIds:[], favorites:new Set(readStore('appleConsultFavorites',[])), recent:readStore('appleConsultRecent',[]), customerMode:false
   };
 
@@ -82,12 +82,17 @@
 
   function renderCategories(){
     els.categoryNav.innerHTML=CATEGORIES.map(cat=>{
-      const count=cat==='전체'?products.length:products.filter(p=>p.category===cat).length;
+      const count=products.filter(p=>p.category===cat).length;
       return `<button class="category-btn ${state.category===cat?'active':''}" data-cat="${esc(cat)}">${esc(CATEGORY_LABEL[cat])}<span>${count}</span></button>`;
     }).join('');
     els.categoryNav.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{
       state.category=b.dataset.cat; state.search=''; els.searchInput.value=''; hideSearch(); els.detailPanel.classList.remove('mobile-open'); renderAll();
     });
+    if(els.showAllBtn){
+      const showingAll=state.category==='전체';
+      els.showAllBtn.classList.toggle('active',showingAll);
+      els.showAllBtn.setAttribute('aria-pressed',String(showingAll));
+    }
   }
 
   function filteredProducts(){
@@ -103,8 +108,8 @@
   }
 
   function renderRecommended(){
-    const cat=state.category==='전체'?'Apple Watch':state.category;
-    const combos=RECOMMENDED[cat]||[];
+    const cat=state.category;
+    const combos=cat==='전체'?[]:(RECOMMENDED[cat]||[]);
     els.recommended.innerHTML=combos.length?combos.map(([a,b])=>`<button data-a="${esc(a)}" data-b="${esc(b)}">${esc(a)} vs ${esc(b)}</button>`).join(''):'';
     els.recommended.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{
       const a=products.find(p=>p.family===btn.dataset.a), b=products.find(p=>p.family===btn.dataset.b);
@@ -319,6 +324,14 @@
   function setCustomerMode(on){state.customerMode=on;document.body.classList.toggle('customer-mode',on);els.viewModeBtn.textContent=on?'고객 보기':'내부 직원용';document.querySelectorAll('.customer-only').forEach(el=>el.style.display=on?'inline':'none');renderSearch()}
   function renderAll(){renderCategories();renderRecommended();renderCatalog();renderDetail();renderCompareTray()}
 
+  els.showAllBtn.onclick=()=>{
+    state.category='전체';
+    state.search='';
+    els.searchInput.value='';
+    hideSearch();
+    els.detailPanel.classList.remove('mobile-open');
+    renderAll();
+  };
   els.sortSelect.onchange=()=>{state.sort=els.sortSelect.value;renderCatalog()};
   els.searchInput.oninput=renderSearch;els.searchInput.onkeydown=e=>{if(e.key==='Enter'){const first=els.searchResults.querySelector('.search-result');if(first)first.click()}if(e.key==='Escape')hideSearch()};
   els.clearSearchBtn.onclick=()=>{els.searchInput.value='';state.search='';hideSearch();renderCatalog();els.searchInput.focus()};

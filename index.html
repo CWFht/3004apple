@@ -40,13 +40,19 @@
     <main class="workspace">
       <section class="catalog-panel">
         <div class="section-title-row">
-          <div><h1 id="catalogTitle">전체 제품</h1><p id="catalogMeta"></p></div>
-          <select id="sortSelect" aria-label="정렬">
+          <div><h1 id="catalogTitle">iPhone</h1><p id="catalogMeta"></p></div>
+          <div class="catalog-actions">
+            <button id="showAllBtn" class="all-products-btn" type="button" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+              전체 제품 보기
+            </button>
+            <select id="sortSelect" aria-label="정렬">
             <option value="name">이름순</option>
             <option value="price-asc">가격 낮은순</option>
             <option value="price-desc">가격 높은순</option>
             <option value="variants">옵션 많은순</option>
-          </select>
+            </select>
+          </div>
         </div>
         <div id="recommendedComparisons" class="recommended"></div>
         <div id="productGrid" class="product-grid"></div>
