@@ -38,12 +38,16 @@
     'AirPods Max': [['착용','오버이어'],['배터리','ANC 상태 최대 20시간'],['추천','몰입형 청취와 헤드폰 착용감']]
   };
   const RECOMMENDED = {
-    'iPhone': [['iPhone 17e','iPhone 17'],['iPhone 17','iPhone Air'],['iPhone 17 Pro','iPhone 17 Pro Max']],
-    'iPad': [['iPad A16','iPad Air 11'],['iPad Air 11','iPad Pro 11'],['iPad Air 13','iPad Pro 13']],
-    'Apple Watch': [['Apple Watch SE3','Apple Watch Series 11'],['Apple Watch Series 11','Apple Watch Ultra3']],
-    'AirPods': [['AirPods 4(ANC)','AirPods Pro 3'],['AirPods 4','AirPods 4(ANC)']],
-    'Mac': [['MacBook Neo','MacBook Air'],['MacBook Air','MacBook Pro'],['Mac mini','iMac']],
+    'iPhone': [['iPhone 18 Pro','iPhone 18 Pro Max'],['iPhone 18 Pro','iPhone 17 Pro'],['iPhone 17','iPhone Air']],
+    'iPad': [['iPad Pro 11','iPad Pro 13'],['iPad Air 11','iPad Pro 11'],['iPad A16','iPad Air 11']],
+    'Apple Watch': [['Apple Watch Series 12','Apple Watch Ultra 4'],['Apple Watch Series 12','Apple Watch SE 3'],['Apple Watch Series 12','Apple Watch Series 11']],
+    'AirPods': [['AirPods 5','AirPods 5 (무선 충전)'],['AirPods 5','AirPods Pro 3'],['AirPods 5','AirPods 4(ANC)']],
+    'Mac': [['MacBook Pro','MacBook Air'],['MacBook Air','MacBook Neo'],['Mac mini','iMac']],
     'Accessory': [], 'AppleCare+': []
+  };
+  const CATEGORY_DEFAULTS = {
+    'iPhone':'iPhone 18 Pro', 'iPad':'iPad Pro 11', 'Apple Watch':'Apple Watch Series 12',
+    'AirPods':'AirPods 5', 'Mac':'MacBook Pro'
   };
 
   const $ = id => document.getElementById(id);
@@ -66,7 +70,7 @@
   };
 
   const state = {
-    category:'iPhone', sort:'name', search:'', selectedId:null, filterKeys:[], selections:{}, selectedVariant:null,
+    category:'iPhone', sort:'latest', search:'', selectedId:null, filterKeys:[], selections:{}, selectedVariant:null,
     compareIds:[], favorites:new Set(readStore('appleConsultFavorites',[])), recent:readStore('appleConsultRecent',[]), customerMode:false
   };
 
@@ -86,7 +90,12 @@
       return `<button class="category-btn ${state.category===cat?'active':''}" data-cat="${esc(cat)}">${esc(CATEGORY_LABEL[cat])}<span>${count}</span></button>`;
     }).join('');
     els.categoryNav.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{
-      state.category=b.dataset.cat; state.search=''; els.searchInput.value=''; hideSearch(); els.detailPanel.classList.remove('mobile-open'); renderAll();
+      state.category=b.dataset.cat; state.search=''; els.searchInput.value=''; hideSearch(); els.detailPanel.classList.remove('mobile-open');
+      const preferredFamily=CATEGORY_DEFAULTS[state.category];
+      const preferred=products.find(p=>p.category===state.category&&p.family===preferredFamily)
+        || products.filter(p=>p.category===state.category).sort((a,b)=>(a.latestRank??999)-(b.latestRank??999))[0];
+      if(preferred){ state.selectedId=preferred.id; initSelections(preferred); addRecent(preferred.id); }
+      renderAll();
     });
     if(els.showAllBtn){
       const showingAll=state.category==='전체';
@@ -100,6 +109,16 @@
     const q=norm(state.search);
     if(q) list=list.filter(p=>productSearchText(p).includes(q));
     return list.sort((a,b)=>{
+      if(state.sort==='latest'){
+        if(Boolean(a.isLatest)!==Boolean(b.isLatest)) return a.isLatest?-1:1;
+        if(state.category==='전체'){
+          const ca=CATEGORIES.indexOf(a.category), cb=CATEGORIES.indexOf(b.category);
+          if(ca!==cb) return ca-cb;
+        }
+        const ra=Number.isFinite(a.latestRank)?a.latestRank:999, rb=Number.isFinite(b.latestRank)?b.latestRank:999;
+        if(ra!==rb) return ra-rb;
+        return a.family.localeCompare(b.family,'ko');
+      }
       if(state.sort==='price-asc') return (a.minPrice??Infinity)-(b.minPrice??Infinity);
       if(state.sort==='price-desc') return (b.minPrice??-1)-(a.minPrice??-1);
       if(state.sort==='variants') return b.variants.length-a.variants.length;
@@ -119,10 +138,11 @@
 
   function productCard(p){
     const img=getImage(p);
-    return `<article class="product-card ${state.selectedId===p.id?'selected':''}" data-id="${esc(p.id)}">
+    return `<article class="product-card ${state.selectedId===p.id?'selected':''} ${p.isLatest?'latest-card':''}" data-id="${esc(p.id)}">
+      ${p.isLatest?'<span class="latest-badge">NEW</span>':''}
       <button class="favorite-dot ${state.favorites.has(p.id)?'on':''}" data-fav="${esc(p.id)}" aria-label="즐겨찾기">${state.favorites.has(p.id)?'♥':'♡'}</button>
       <div class="product-image">${img?`<img src="${esc(img)}" alt="${esc(p.family)}" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><div class="fallback-art" hidden></div>`:'<div class="fallback-art"></div>'}</div>
-      <span class="category-label">${esc(CATEGORY_LABEL[p.category]||p.category)}</span><h3>${esc(p.family)}</h3>
+      <span class="category-label">${p.isLatest?'<b class="category-new">최신</b> ':''}${esc(CATEGORY_LABEL[p.category]||p.category)}</span><h3>${esc(p.family)}</h3>
       <div class="product-bottom"><strong>${p.minPrice?`${fmtPrice(p.minPrice)}부터`:'가격 확인'}</strong><span>${p.variants.length}개 옵션</span></div>
     </article>`;
   }
@@ -131,7 +151,8 @@
     const list=filteredProducts();
     const title=state.search?`“${state.search}” 검색 결과`:CATEGORY_LABEL[state.category];
     els.catalogTitle.textContent=title;
-    els.catalogMeta.textContent=`제품군 ${list.length}개 · 모델 옵션 ${list.reduce((n,p)=>n+p.variants.length,0).toLocaleString()}개`;
+    const latestCount=list.filter(p=>p.isLatest).length;
+    els.catalogMeta.textContent=`제품군 ${list.length}개 · 모델 옵션 ${list.reduce((n,p)=>n+p.variants.length,0).toLocaleString()}개${latestCount?` · 최신 시리즈 ${latestCount}개 우선`:''}`;
     els.productGrid.innerHTML=list.map(productCard).join('');
     els.emptyState.hidden=list.length!==0;
     els.productGrid.querySelectorAll('.product-card').forEach(card=>card.onclick=e=>{
@@ -169,7 +190,7 @@
     ensureValidSelection(p);
     const v=state.selectedVariant||{};
     els.detailEmpty.hidden=true;els.detailContent.hidden=false;
-    els.detailCategory.textContent=CATEGORY_LABEL[p.category]||p.category;els.detailFamily.textContent=p.family;els.detailDescription.textContent=p.description;
+    els.detailCategory.textContent=`${p.isLatest?'NEW · ':''}${CATEGORY_LABEL[p.category]||p.category}`;els.detailCategory.classList.toggle('latest-detail',!!p.isLatest);els.detailFamily.textContent=p.family;els.detailDescription.textContent=p.description;
     els.detailStartPrice.textContent=p.minPrice?`${fmtPrice(p.minPrice)}부터`:'가격 정보 확인 필요';els.variantCountBadge.textContent=`${p.variants.length}개 모델 옵션`;
     els.officialLink.href=p.sourceUrl||'#';els.officialLink.style.display=p.sourceUrl?'inline':'none';
     const img=getImage(p);els.detailImage.style.display=img?'block':'none';els.detailFallback.hidden=!!img;
@@ -347,5 +368,5 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideSearch();closeCompare();closeSheet();els.detailPanel.classList.remove('mobile-open')}});
 
   renderAll();
-  const initial=products.find(p=>p.family==='iPhone 17')||products[0];if(initial)selectProduct(initial.id,null,{openMobile:false});
+  const initial=products.find(p=>p.family==='iPhone 18 Pro')||products.filter(p=>p.category==='iPhone').sort((a,b)=>(a.latestRank??999)-(b.latestRank??999))[0]||products[0];if(initial)selectProduct(initial.id,null,{openMobile:false});
 })();

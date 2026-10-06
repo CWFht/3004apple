@@ -1,4 +1,13 @@
-# Apple 통합 상담북
+# Apple 통합 상담북 — 2026년 9월 운영 라인업
+
+- 기준 자료: `13_2609)Apple 운영 라인업.pptx` (2026-09-30)
+- 최초 화면: iPhone 18 Pro
+- 기본 정렬: 최신 시리즈순
+- 최신 우선 표시: iPhone 18 Pro/Pro Max, Apple Watch Series 12/Ultra 4, AirPods 5
+- 가격·모델코드: 운영 PPT 기준
+- 상세 사양: Apple 공식 제품 사양 기반 별도 데이터(`official-specs.js`)
+- 자료에 대외비 표시가 있으므로 공개 배포 전 접근 권한을 확인하세요.
+
 
 2026년 7월 Apple 운영 라인업 PPT를 기반으로 생성한 정적 상담 페이지입니다.
 
